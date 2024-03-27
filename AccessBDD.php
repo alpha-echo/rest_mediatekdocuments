@@ -51,7 +51,6 @@ class AccessBDD {
                 case "genre" :
                 case "public" :
                 case "rayon" :
-                case "etat" :
                     // select portant sur une table contenant juste id et libelle
                     return $this->selectTableSimple($table);
                 default:
@@ -533,7 +532,7 @@ class AccessBDD {
      * @param array $param nom et valeur de chaque champs de la ligne
      * @return true si la modification a fonctionné
      */	
-    public function updateOne($table, $id, $champs){
+    public function updateOne($table, $id, $champs, $numero = null){
         if($this->conn != null && $champs != null){
             // construction de la requête
             $requete = "update $table set ";
@@ -543,7 +542,13 @@ class AccessBDD {
             // (enlève la dernière virgule)
             $requete = substr($requete, 0, strlen($requete)-1);				
             $champs["id"] = $id;
-            $requete .= " where id=:id;";				
+            $requete .= " where id=:id;";
+            if($numero != null)
+            {
+                $requete = substr($requete, 0, strlen($requete)-1);				
+                $champs["numero"] = $numero;
+                $requete .= " and numero=:numero;";
+            }				
             return $this->conn->execute($requete, $champs);		
         }else{
             return null;
@@ -651,6 +656,26 @@ class AccessBDD {
      * @return void
      */
     public function updateAbonnement($id, $champs)
+    {
+        $champsCommande = [ "id" => $champs["Id"], "dateCommande" => $champs["DateCommande"],
+            "montant" => $champs["Montant"]];
+        $champsAbonnement = [ "id" => $champs["Id"], "dateFinAbonnement" => $champs["DateFinAbonnement"],
+                "idRevue" => $champs["IdRevue"]];
+        $result = $this->updateOne("commande", $id, $champsCommande);
+        if ($result == null || $result == false){
+            return null;
+        }
+        return  $this->updateOne( "abonnement",$id, $champsAbonnement); #updateExemplaire
+    }
+
+     /**
+     * Modification de l'entitée composée abonnement dans la bdd
+     *
+     * @param [type] $id
+     * @param [type] $champs
+     * @return void
+     */
+    public function updateExemplaire($id, $champs)
     {
         $champsCommande = [ "id" => $champs["Id"], "dateCommande" => $champs["DateCommande"],
             "montant" => $champs["Montant"]];

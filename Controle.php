@@ -124,6 +124,8 @@ class Controle{
             $result = $this->accessBDD->updateCommande($id, $champs);
         }elseif ($table == "abonnement"){
             $result = $this->accessBDD->updateAbonnement($id, $champs);
+        }elseif ($table == "exemplaire"){
+            $result = $this->accessBDD->updateOne($table, $id, $champs, $champs["Numero"]);
         }else{
             $result = $this->accessBDD->updateOne($table, $id, $champs);
         }	
