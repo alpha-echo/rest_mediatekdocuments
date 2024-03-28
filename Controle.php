@@ -60,6 +60,7 @@ class Controle{
      * @param array $champs nom et valeur des champs
      */
     public function delete($table, $champs){
+        $result = null;
         if ($table == "livre"){
             $result = $this->accessBDD->deleteLivre($champs);	
         }elseif ($table == "dvd"){
@@ -73,7 +74,7 @@ class Controle{
         }else{
             $result = $this->accessBDD->delete($table, $champs);
         }
-        if ($result == null || $result == false){
+        if ($result == null || $result == false ){
             $this->reponse(400, "requete invalide");
         }else{	
             $this->reponse(200, "OK");
@@ -86,6 +87,7 @@ class Controle{
      * @param array $champs nom et valeur des champs
      */
     public function post($table, $champs){
+        $result = null;
         if ($table == "livre"){
             $result = $this->accessBDD->insertLivre($champs);	
         }elseif ($table == "dvd"){
@@ -114,6 +116,7 @@ class Controle{
      * @param array $champs nom et valeur des champs
      */
     public function put($table, $id, $champs){
+        $result = null;
         if ($table == "livre"){
             $result = $this->accessBDD->updateLivre($id, $champs);	
         }elseif ($table == "dvd"){
