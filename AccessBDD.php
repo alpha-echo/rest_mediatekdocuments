@@ -77,6 +77,8 @@ class AccessBDD {
                     return $this->selectCommandesDocument($champs['idLivreDvd']);
                 case "abonnements" :
                     return $this->selectAbonnementsRevue($champs['idRevue']);
+                case "utilisateur" :
+                    return $this->selectUtilisateur($champs);
                 default:                    
                     // cas d'un select sur une table avec recherche sur des champs
                     return $this->selectTableOnConditons($table, $champs);					
@@ -188,7 +190,7 @@ class AccessBDD {
      * récupération de tous les abonnements d'une revue
      *
      * @param [type] $idRevue
-     * @return void
+     * @return lignes de la requete
      */
     public function selectAbonnementsRevue($idRevue){
         $param = array(
@@ -199,7 +201,27 @@ class AccessBDD {
         $req .= "where a.idRevue = :idRevue ";
         $req .= "order by c.dateCommande DESC";	
         return $this->conn->query($req, $param);
+    }
 
+    /**
+     * récupération d'un utilisateur si les données correspondent
+     *
+     * @param [type] $champs
+     * @return ligne de la requete
+     */
+    public function selectUtilisateur($champs)
+    {
+        $param = array(
+            "mail" => $champs["mail"],
+            "password" => $champs["password"]
+        );
+        $req = "Select u.id, u.nom, u.prenom, u.mail, u.idservice, s.libelle as service ";
+        $req .= "from utilisateur u join service s on u.idservice=s.id ";
+        $req .= "where u.mail = :mail ";
+        $req .= "and u.password = :password ";
+        $req .= "or u.nom = :mail ";
+        $req .= "and u.password = :password";
+        return $this->conn->query($req, $param);
     }
 
     /**

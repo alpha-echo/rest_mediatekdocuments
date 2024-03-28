@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : dim. 28 jan. 2024 à 16:02
+-- Généré le : mar. 30 jan. 2024 à 18:33
 -- Version du serveur : 5.7.44
--- Version de PHP : 8.0.30
+-- Version de PHP : 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -203,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `commandedocument` (
 
 INSERT INTO `commandedocument` (`id`, `nbExemplaire`, `idLivreDvd`, `idsuivi`) VALUES
 ('00002', 2, '00017', 4),
-('00003', 23, '00017', 4),
+('00003', 2, '00017', 4),
 ('00004', 15, '00017', 3),
 ('00005', 4, '00001', 3),
 ('00006', 2, '00001', 3),
@@ -215,7 +215,7 @@ INSERT INTO `commandedocument` (`id`, `nbExemplaire`, `idLivreDvd`, `idsuivi`) V
 ('00014', 3, '20004', 3),
 ('00015', 3, '00020', 3),
 ('00016', 1, '20002', 2),
-('00017', 1, '20003', 1),
+('00017', 1, '20003', 2),
 ('00018', 6, '00007', 3),
 ('00019', 2, '00019', 1),
 ('00020', 1, '20002', 1),
@@ -305,7 +305,7 @@ INSERT INTO `document` (`id`, `titre`, `image`, `idRayon`, `idPublic`, `idGenre`
 ('00014', 'Mauvaise étoile', '', 'LV003', '00003', '10014'),
 ('00015', 'La confrérie des téméraires', '', 'JN002', '00004', '10014'),
 ('00016', 'Le butin du requin', '', 'JN002', '00004', '10014'),
-('00017', 'Catastrophes au Brésil', '', 'JN002', '00004', '10007'),
+('00017', 'Catastrophes au Brésil', '', 'BL001', '00004', '10007'),
 ('00018', 'Le Routard - Maroc', '', 'DV005', '00003', '10011'),
 ('00019', 'Guide Vert - Iles Canaries', '', 'DV005', '00003', '10011'),
 ('00020', 'Guide Vert - Irlande', '', 'DV005', '00003', '10011'),
@@ -326,7 +326,7 @@ INSERT INTO `document` (`id`, `titre`, `image`, `idRayon`, `idPublic`, `idGenre`
 ('10009', 'L\'Equipe', '', 'PR001', '00002', '10017'),
 ('10010', 'L\'Equipe Magazine', '', 'PR002', '00002', '10017'),
 ('10011', 'Geo', '', 'BL001', '00003', '10016'),
-('10013', 'heyyy toi la', '', 'BL001', '00001', '10001'),
+('10013', 'heyyy toi la', '', 'BL001', '00004', '10001'),
 ('20001', 'Star Wars 5 L\'empire contre attaque', '', 'DF001', '00003', '10002'),
 ('20002', 'Le seigneur des anneaux : la communauté de l\'anneau', '', 'DF001', '00003', '10019'),
 ('20003', 'Jurassic Park', '', 'DF001', '00003', '10002'),
@@ -437,6 +437,7 @@ INSERT INTO `exemplaire` (`id`, `numero`, `dateAchat`, `photo`, `idEtat`) VALUES
 ('00024', 7, '2024-01-21', '', '00001'),
 ('00024', 8, '2024-01-21', '', '00001'),
 ('00024', 9, '2024-01-21', '', '00001'),
+('10001', 3, '2024-01-28', '', '00002'),
 ('10003', 23, '2024-01-25', '', '00001'),
 ('10007', 3237, '2021-11-23', '', '00001'),
 ('10007', 3238, '2021-11-30', '', '00001'),
@@ -452,10 +453,10 @@ INSERT INTO `exemplaire` (`id`, `numero`, `dateAchat`, `photo`, `idEtat`) VALUES
 ('10011', 512, '2021-10-06', '', '00001'),
 ('10011', 513, '2021-11-01', '', '00001'),
 ('10011', 514, '2021-12-01', '', '00001'),
-('20002', 2, '2024-01-22', '', '00001'),
+('20002', 2, '2024-01-22', '', '00002'),
 ('20002', 3, '2024-01-22', '', '00001'),
 ('20002', 4, '2024-01-28', '', '00001'),
-('20002', 5, '2024-01-28', '', '00001');
+('20002', 5, '2024-01-28', '', '00004');
 
 -- --------------------------------------------------------
 
@@ -715,6 +716,29 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `service`
+--
+
+DROP TABLE IF EXISTS `service`;
+CREATE TABLE IF NOT EXISTS `service` (
+  `id` varchar(5) NOT NULL,
+  `libelle` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `service`
+--
+
+INSERT INTO `service` (`id`, `libelle`) VALUES
+('0001', 'compta'),
+('0002', 'biblio'),
+('0003', 'culture'),
+('0004', 'accueil');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `suivi`
 --
 
@@ -734,6 +758,34 @@ INSERT INTO `suivi` (`id`, `etat`) VALUES
 (2, 'relancée'),
 (3, 'livrée'),
 (4, 'réglée ');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `utilisateur`
+--
+
+DROP TABLE IF EXISTS `utilisateur`;
+CREATE TABLE IF NOT EXISTS `utilisateur` (
+  `id` varchar(10) NOT NULL,
+  `nom` varchar(20) NOT NULL,
+  `prenom` varchar(20) NOT NULL,
+  `mail` varchar(20) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `idservice` varchar(5) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idservice` (`idservice`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `utilisateur`
+--
+
+INSERT INTO `utilisateur` (`id`, `nom`, `prenom`, `mail`, `password`, `idservice`) VALUES
+('0001', 'Paul', 'Paul', 'paul@mail.com', '0558687dff97785f3391d655a2b9a38ec99a8e0dc20d9ef192cc3861bd2347f8', '0001'),
+('0002', 'pat', 'jean', 'jean@pat.com', '0558687dff97785f3391d655a2b9a38ec99a8e0dc20d9ef192cc3861bd2347f8', '0002'),
+('0003', 'monique', 'monique', 'momo@gmail.com', '0558687dff97785f3391d655a2b9a38ec99a8e0dc20d9ef192cc3861bd2347f8', '0003'),
+('0004', 'Martin', 'Martine', 'Ma@mail.com', '0558687dff97785f3391d655a2b9a38ec99a8e0dc20d9ef192cc3861bd2347f8', '0004');
 
 --
 -- Contraintes pour les tables déchargées
@@ -792,6 +844,12 @@ ALTER TABLE `livres_dvd`
 --
 ALTER TABLE `revue`
   ADD CONSTRAINT `revue_ibfk_1` FOREIGN KEY (`id`) REFERENCES `document` (`id`);
+
+--
+-- Contraintes pour la table `utilisateur`
+--
+ALTER TABLE `utilisateur`
+  ADD CONSTRAINT `utilisateur_ibfk_1` FOREIGN KEY (`idservice`) REFERENCES `service` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
