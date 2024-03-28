@@ -1,6 +1,5 @@
 <?php
 include_once("ConnexionPDO.php");
-
 /**
  * Classe de construction des requêtes SQL à envoyer à la BDD
  */
@@ -46,8 +45,6 @@ class AccessBDD {
                     return $this->selectMaxDvd();
                 case "maxrevue" :
                     return $this->selectMaxRevue();
-                case "exemplaire" :
-                    return $this->selectExemplairesRevue();
                 case "genre" :
                 case "public" :
                 case "rayon" :
@@ -56,7 +53,7 @@ class AccessBDD {
                 default:
                     // select portant sur une table, sans condition
                     return $this->selectTable($table);
-            }			
+            }
         }else{
             return null;
         }
@@ -81,8 +78,8 @@ class AccessBDD {
                     return $this->selectUtilisateur($champs);
                 default:                    
                     // cas d'un select sur une table avec recherche sur des champs
-                    return $this->selectTableOnConditons($table, $champs);					
-            }				
+                    return $this->selectTableOnConditons($table, $champs);
+            }
         }else{
                 return null;
         }
@@ -121,8 +118,8 @@ class AccessBDD {
             $requete .= "$key=:$key and";
         }
         // (enlève le dernier and)
-        $requete = substr($requete, 0, strlen($requete)-3);								
-        return $this->conn->query($requete, $champs);		
+        $requete = substr($requete, 0, strlen($requete)-3);
+        return $this->conn->query($requete, $champs);
     }
 
     /**
@@ -138,7 +135,7 @@ class AccessBDD {
         $req .= "join rayon r on r.id=d.idRayon ";
         $req .= "order by titre ";		
         return $this->conn->query($req);
-    }	
+    }
 
     /**
      * récupération de toutes les lignes de la table DVD et les tables associées
@@ -153,7 +150,7 @@ class AccessBDD {
         $req .= "join rayon r on r.id=d.idRayon ";
         $req .= "order by titre ";	
         return $this->conn->query($req);
-    }	
+    }
 
     /**
      * récupération de toutes les lignes de la table Revue et les tables associées
@@ -168,7 +165,7 @@ class AccessBDD {
         $req .= "join rayon r on r.id=d.idRayon ";
         $req .= "order by titre ";
         return $this->conn->query($req);
-    }	
+    }
 
     /**
      * récupération de tous les exemplaires d'une revue
@@ -280,7 +277,7 @@ class AccessBDD {
         $req .= "where cd.idLivreDvd = :idLivreDvd ";
         $req .= "order by c.dateCommande DESC";	
         return $this->conn->query($req, $param);
-    }		
+    }
 
      /**
      * suppresion d'une ou plusieurs lignes dans une table
@@ -553,7 +550,7 @@ class AccessBDD {
      * @param string $id id de la ligne à modifier
      * @param array $param nom et valeur de chaque champs de la ligne
      * @return true si la modification a fonctionné
-     */	
+     */
     public function updateOne($table, $id, $champs, $numero = null){
         if($this->conn != null && $champs != null){
             // construction de la requête
