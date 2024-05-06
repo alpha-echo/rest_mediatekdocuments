@@ -5,8 +5,8 @@ include_once("ConnexionPDO.php");
  */
 class AccessBDD {
 	
-    public $login="root";
-    public $mdp="";
+    public $login="Alpha-Echo";
+    public $mdp='$Dig$Gilt$';
     public $bd="mediatek86";
     public $serveur="localhost";
     public $port="3306";	
