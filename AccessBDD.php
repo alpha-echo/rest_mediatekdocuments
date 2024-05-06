@@ -11,7 +11,7 @@ class AccessBDD {
     public $serveur="localhost";
     public $port="3306";	
     public $conn = null;
-
+//test
     /**
      * constructeur : demande de connexion à la BDD
      */
